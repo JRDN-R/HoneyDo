@@ -119,9 +119,19 @@ button { -webkit-tap-highlight-color: transparent; }
 .hide { display: none !important; }
 
 .hero {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 2.5vw, 28px);
   margin-bottom: 22px;
   padding-right: 64px;
+}
+
+.hero-icon {
+  width: auto;
+  height: clamp(132px, 19vw, 210px);
+  object-fit: contain;
+  flex: 0 0 auto;
+  transform: translateY(2%);
 }
 
 h1 {
@@ -502,7 +512,15 @@ body.dark .icon-btn {
     padding-top: 22px;
   }
 
-  .hero { padding-right: 66px; }
+  .hero {
+    gap: 10px;
+    padding-right: 66px;
+  }
+
+  .hero-icon {
+    height: clamp(106px, 32vw, 150px);
+  }
+
   .grid { grid-template-columns: 1fr; }
   .form-row { grid-template-columns: 1fr; }
   .task-top { align-items: flex-start; }
@@ -527,6 +545,7 @@ body.dark .icon-btn {
 
   <main id="mainView" class="hide">
     <header class="hero">
+      <img class="hero-icon" src="hicon.png" alt="" aria-hidden="true" />
       <h1>Honey<br>List</h1>
     </header>
 
