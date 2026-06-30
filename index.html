@@ -19,7 +19,7 @@
   <main id="mainView" class="hide">
     <header class="hero">
       <img class="hero-icon" src="hicon.png" alt="" aria-hidden="true" />
-      <h1>Honey<br>List</h1>
+      <h1>Honey<br>Do</h1>
     </header>
 
     <section id="requestView" class="view view-wrap active">
@@ -138,6 +138,20 @@
 
 <div id="toast" class="toast">Saved</div>
 <script>
+  const heroTitle = document.querySelector(".hero h1");
+  const requestView = document.getElementById("requestView");
+  const listView = document.getElementById("listView");
+
+  function updateHeroTitle() {
+    heroTitle.innerHTML = listView.classList.contains("active") ? "Honey<br>List" : "Honey<br>Do";
+  }
+
+  [requestView, listView].forEach((view) => {
+    new MutationObserver(updateHeroTitle).observe(view, { attributes: true, attributeFilter: ["class"] });
+  });
+
+  updateHeroTitle();
+
   const safeDateInput = document.getElementById("dueDate");
   safeDateInput.addEventListener("focus", () => {
     safeDateInput.type = "date";
