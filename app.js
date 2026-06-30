@@ -16,6 +16,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const tasksRef = collection(db, "honeyTasks");
+const VIEW_STORAGE_KEY = "honeyDoCurrentView";
 
 const loadingView = document.getElementById("loadingView");
 const mainView = document.getElementById("mainView");
@@ -47,6 +48,7 @@ let unsubscribeTasks = null;
 initTheme();
 initAuth();
 initEvents();
+restoreSavedView();
 
 function initTheme() {
   const savedTheme = localStorage.getItem("honeyTheme");
@@ -124,10 +126,25 @@ function initEvents() {
   });
 }
 
-function showView(view) {
+function restoreSavedView() {
+  const savedView = localStorage.getItem(VIEW_STORAGE_KEY);
+  if (savedView === "list" || savedView === "request") {
+    showView(savedView, { save: false });
+  }
+}
+
+function showView(view, options = {}) {
+  const safeView = view === "list" ? "list" : "request";
+  const shouldSave = options.save !== false;
+
   document.querySelectorAll(".view").forEach((item) => item.classList.remove("active"));
-  document.getElementById(`${view}View`).classList.add("active");
-  document.querySelectorAll("[data-view]").forEach((btn) => btn.classList.toggle("active", btn.dataset.view === view));
+  document.getElementById(`${safeView}View`).classList.add("active");
+  document.querySelectorAll("[data-view]").forEach((btn) => btn.classList.toggle("active", btn.dataset.view === safeView));
+
+  if (shouldSave) {
+    localStorage.setItem(VIEW_STORAGE_KEY, safeView);
+  }
+
   menu.classList.remove("open");
 }
 
