@@ -4,22 +4,19 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Honey Do List</title>
-
 <style>
 :root {
   --bg: #faf6f1;
-  --bg-soft: #fffaf5;
-  --card: rgba(255, 255, 255, 0.72);
-  --card-solid: #ffffff;
+  --card: rgba(255,255,255,.72);
+  --card-solid: #fff;
   --text: #29211d;
   --muted: #84756d;
-  --line: rgba(64, 42, 31, 0.12);
+  --line: rgba(64,42,31,.12);
   --accent: #d98f7b;
-  --accent-2: #e9b59d;
   --accent-dark: #a95f50;
   --danger: #a74736;
   --success: #4f7b58;
-  --shadow: 0 24px 70px rgba(98, 57, 34, 0.14);
+  --shadow: 0 24px 70px rgba(98,57,34,.14);
   --radius-xl: 28px;
   --radius-lg: 22px;
   --radius-md: 16px;
@@ -27,27 +24,20 @@
 
 body.dark {
   --bg: #151211;
-  --bg-soft: #1d1917;
-  --card: rgba(35, 30, 27, 0.76);
+  --card: rgba(35,30,27,.76);
   --card-solid: #231e1b;
   --text: #f8eee6;
   --muted: #b8aaa1;
-  --line: rgba(255, 241, 228, 0.12);
+  --line: rgba(255,241,228,.12);
   --accent: #f0a58f;
-  --accent-2: #c98272;
   --accent-dark: #ffc0ad;
   --danger: #ff9b8b;
   --success: #9ed4a6;
-  --shadow: 0 24px 70px rgba(0, 0, 0, 0.36);
+  --shadow: 0 24px 70px rgba(0,0,0,.36);
 }
 
-* {
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
@@ -55,23 +45,15 @@ body {
   color: var(--text);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   background:
-    radial-gradient(circle at 8% 0%, rgba(217, 143, 123, 0.26), transparent 30rem),
-    radial-gradient(circle at 92% 18%, rgba(233, 181, 157, 0.22), transparent 32rem),
-    radial-gradient(circle at 50% 100%, rgba(217, 143, 123, 0.12), transparent 34rem),
+    radial-gradient(circle at 8% 0%, rgba(217,143,123,.26), transparent 30rem),
+    radial-gradient(circle at 92% 18%, rgba(233,181,157,.22), transparent 32rem),
+    radial-gradient(circle at 50% 100%, rgba(217,143,123,.12), transparent 34rem),
     var(--bg);
-  transition: background 0.25s ease, color 0.25s ease;
+  transition: background .25s ease, color .25s ease;
 }
 
-button,
-input,
-textarea,
-select {
-  font: inherit;
-}
-
-button {
-  -webkit-tap-highlight-color: transparent;
-}
+button, input, textarea, select { font: inherit; }
+button { -webkit-tap-highlight-color: transparent; }
 
 .app {
   width: min(1160px, calc(100% - 28px));
@@ -85,10 +67,7 @@ button {
   place-items: center;
 }
 
-.loading-card {
-  width: min(390px, 100%);
-  padding: 26px;
-  border-radius: var(--radius-xl);
+.loading-card, .panel, .menu, .hamburger {
   background: var(--card);
   border: 1px solid var(--line);
   box-shadow: var(--shadow);
@@ -96,10 +75,16 @@ button {
   -webkit-backdrop-filter: blur(18px);
 }
 
+.loading-card {
+  width: min(390px, 100%);
+  padding: 26px;
+  border-radius: var(--radius-xl);
+}
+
 .loading-title {
   font-size: 1.35rem;
   font-weight: 850;
-  letter-spacing: -0.04em;
+  letter-spacing: -.04em;
   margin-bottom: 10px;
 }
 
@@ -113,7 +98,7 @@ button {
   border-radius: 999px;
   margin-top: 18px;
   overflow: hidden;
-  background: rgba(128, 100, 84, 0.14);
+  background: rgba(128,100,84,.14);
 }
 
 .skeleton::after {
@@ -122,104 +107,40 @@ button {
   width: 42%;
   height: 100%;
   border-radius: 999px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.62), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.62), transparent);
   animation: shimmer 1.4s infinite;
 }
 
 @keyframes shimmer {
-  0% {
-    transform: translateX(-120%);
-  }
-  100% {
-    transform: translateX(260%);
-  }
+  0% { transform: translateX(-120%); }
+  100% { transform: translateX(260%); }
 }
 
-.hide {
-  display: none !important;
-}
+.hide { display: none !important; }
 
 .hero {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 20px;
-  align-items: start;
+  display: block;
   margin-bottom: 22px;
   padding-right: 64px;
-}
-
-.kicker {
-  display: inline-flex;
-  width: fit-content;
-  align-items: center;
-  gap: 8px;
-  color: var(--accent-dark);
-  font-size: 0.78rem;
-  font-weight: 850;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  margin-bottom: 10px;
-}
-
-.kicker::before {
-  content: "";
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: var(--accent);
 }
 
 h1 {
   margin: 0;
   font-size: clamp(2.8rem, 8vw, 5.8rem);
-  line-height: 0.87;
-  letter-spacing: -0.085em;
-}
-
-.subtitle {
-  margin: 14px 0 0;
-  color: var(--muted);
-  max-width: 650px;
-  font-size: 1.02rem;
-  line-height: 1.5;
-}
-
-.status-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 13px;
-  border-radius: 999px;
-  border: 1px solid var(--line);
-  background: var(--card);
-  color: var(--muted);
-  font-size: 0.85rem;
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-}
-
-.status-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--success);
+  line-height: .87;
+  letter-spacing: -.085em;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: 0.92fr 1.42fr;
+  grid-template-columns: .92fr 1.42fr;
   gap: 18px;
   align-items: start;
 }
 
 .panel {
-  background: var(--card);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow);
   border-radius: var(--radius-xl);
   padding: 20px;
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
 }
 
 .panel-title {
@@ -233,13 +154,13 @@ h1 {
 .panel-title h2 {
   margin: 0;
   font-size: 1.35rem;
-  letter-spacing: -0.045em;
+  letter-spacing: -.045em;
 }
 
 .panel-title p {
   margin: 4px 0 0;
   color: var(--muted);
-  font-size: 0.9rem;
+  font-size: .9rem;
 }
 
 .field {
@@ -250,34 +171,30 @@ h1 {
 
 label {
   color: var(--muted);
-  font-size: 0.84rem;
+  font-size: .84rem;
   font-weight: 800;
 }
 
-input,
-textarea,
-select {
+input, textarea, select {
   width: 100%;
   border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.56);
+  background: rgba(255,255,255,.56);
   color: var(--text);
   border-radius: var(--radius-md);
   padding: 13px 14px;
   outline: none;
-  transition: border 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+  transition: border .18s ease, box-shadow .18s ease, background .18s ease;
 }
 
 body.dark input,
 body.dark textarea,
 body.dark select {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255,255,255,.06);
 }
 
-input:focus,
-textarea:focus,
-select:focus {
-  border-color: rgba(217, 143, 123, 0.62);
-  box-shadow: 0 0 0 4px rgba(217, 143, 123, 0.13);
+input:focus, textarea:focus, select:focus {
+  border-color: rgba(217,143,123,.62);
+  box-shadow: 0 0 0 4px rgba(217,143,123,.13);
 }
 
 textarea {
@@ -312,31 +229,26 @@ textarea {
   padding: 11px 10px;
   color: var(--muted);
   cursor: pointer;
-  background: rgba(255, 255, 255, 0.38);
+  background: rgba(255,255,255,.38);
   font-weight: 800;
-  font-size: 0.88rem;
-  transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease;
+  font-size: .88rem;
+  transition: transform .15s ease, background .15s ease, color .15s ease;
 }
 
 body.dark .priority-choice {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255,255,255,.06);
 }
 
 .priority-picker input:checked + .priority-choice {
   color: #fff;
   background: linear-gradient(135deg, var(--accent), var(--accent-dark));
   border-color: transparent;
-  box-shadow: 0 12px 26px rgba(217, 143, 123, 0.25);
+  box-shadow: 0 12px 26px rgba(217,143,123,.25);
 }
 
-.priority-choice:active {
-  transform: scale(0.98);
-}
+.priority-choice:active { transform: scale(.98); }
 
-.primary-btn,
-.ghost-btn,
-.icon-btn,
-.tab-btn {
+.primary-btn, .ghost-btn, .icon-btn, .tab-btn {
   border: 0;
   cursor: pointer;
 }
@@ -348,7 +260,7 @@ body.dark .priority-choice {
   background: linear-gradient(135deg, var(--accent), var(--accent-dark));
   color: #fff;
   font-weight: 900;
-  box-shadow: 0 15px 32px rgba(184, 111, 91, 0.26);
+  box-shadow: 0 15px 32px rgba(184,111,91,.26);
 }
 
 .secondary-row {
@@ -361,12 +273,12 @@ body.dark .priority-choice {
   padding: 10px 13px;
   border-radius: 999px;
   color: var(--text);
-  background: rgba(255, 255, 255, 0.44);
+  background: rgba(255,255,255,.44);
   border: 1px solid var(--line);
 }
 
 body.dark .ghost-btn {
-  background: rgba(255, 255, 255, 0.07);
+  background: rgba(255,255,255,.07);
 }
 
 .toolbar {
@@ -387,7 +299,7 @@ body.dark .ghost-btn {
 .task-count {
   color: var(--muted);
   margin-left: auto;
-  font-size: 0.88rem;
+  font-size: .88rem;
   font-weight: 750;
 }
 
@@ -400,25 +312,17 @@ body.dark .ghost-btn {
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   padding: 16px;
-  background: rgba(255, 255, 255, 0.42);
-  transition: opacity 0.16s ease, transform 0.16s ease, background 0.16s ease;
+  background: rgba(255,255,255,.42);
+  transition: opacity .16s ease, transform .16s ease, background .16s ease;
 }
 
 body.dark .task-card {
-  background: rgba(255, 255, 255, 0.055);
+  background: rgba(255,255,255,.055);
 }
 
-.task-card:hover {
-  transform: translateY(-1px);
-}
-
-.task-card.done {
-  opacity: 0.58;
-}
-
-.task-card.done h3 {
-  text-decoration: line-through;
-}
+.task-card:hover { transform: translateY(-1px); }
+.task-card.done { opacity: .58; }
+.task-card.done h3 { text-decoration: line-through; }
 
 .task-top {
   display: flex;
@@ -430,7 +334,7 @@ body.dark .task-card {
 .task-card h3 {
   margin: 0 0 7px;
   font-size: 1.06rem;
-  letter-spacing: -0.025em;
+  letter-spacing: -.025em;
 }
 
 .task-card p {
@@ -450,35 +354,19 @@ body.dark .task-card {
   border: 1px solid var(--line);
   border-radius: 999px;
   padding: 6px 9px;
-  font-size: 0.78rem;
+  font-size: .78rem;
   font-weight: 750;
   color: var(--muted);
-  background: rgba(255, 255, 255, 0.36);
+  background: rgba(255,255,255,.36);
 }
 
 body.dark .pill {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255,255,255,.06);
 }
 
-.priority-high {
-  color: var(--danger);
-}
-
-.priority-normal {
-  color: var(--accent-dark);
-}
-
-.priority-low {
-  color: var(--muted);
-}
-
-.overdue {
-  color: var(--danger);
-}
-
-.today {
-  color: var(--accent-dark);
-}
+.priority-high, .overdue { color: var(--danger); }
+.priority-normal, .today { color: var(--accent-dark); }
+.priority-low { color: var(--muted); }
 
 .actions {
   display: flex;
@@ -490,7 +378,7 @@ body.dark .pill {
   width: 36px;
   height: 36px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.46);
+  background: rgba(255,255,255,.46);
   color: var(--text);
   border: 1px solid var(--line);
   display: grid;
@@ -498,7 +386,7 @@ body.dark .pill {
 }
 
 body.dark .icon-btn {
-  background: rgba(255, 255, 255, 0.07);
+  background: rgba(255,255,255,.07);
 }
 
 .empty {
@@ -514,7 +402,7 @@ body.dark .icon-btn {
   color: var(--danger);
   margin-top: 12px;
   min-height: 20px;
-  font-size: 0.9rem;
+  font-size: .9rem;
 }
 
 .floating-nav {
@@ -528,15 +416,10 @@ body.dark .icon-btn {
   width: 58px;
   height: 58px;
   border-radius: 50%;
-  border: 1px solid var(--line);
-  background: var(--card);
-  box-shadow: var(--shadow);
   color: var(--text);
   display: grid;
   place-items: center;
   cursor: pointer;
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
 }
 
 .hamburger span,
@@ -548,16 +431,11 @@ body.dark .icon-btn {
   background: currentColor;
   border-radius: 999px;
   content: "";
-  transition: transform 0.18s ease;
+  transition: transform .18s ease;
 }
 
-.hamburger span::before {
-  transform: translateY(-7px);
-}
-
-.hamburger span::after {
-  transform: translateY(5px);
-}
+.hamburger span::before { transform: translateY(-7px); }
+.hamburger span::after { transform: translateY(5px); }
 
 .menu {
   position: absolute;
@@ -567,11 +445,6 @@ body.dark .icon-btn {
   border-radius: 26px;
   padding: 12px;
   display: none;
-  background: var(--card);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
 }
 
 .menu.open {
@@ -589,7 +462,7 @@ body.dark .icon-btn {
 }
 
 .tab-btn.active {
-  background: rgba(217, 143, 123, 0.18);
+  background: rgba(217,143,123,.18);
   color: var(--accent-dark);
   font-weight: 900;
 }
@@ -618,12 +491,10 @@ body.dark .icon-btn {
   border-radius: 999px;
   padding: 12px 16px;
   z-index: 40;
-  transition: transform 0.22s ease;
+  transition: transform .22s ease;
 }
 
-.toast.show {
-  transform: translateX(-50%) translateY(0);
-}
+.toast.show { transform: translateX(-50%) translateY(0); }
 
 @media (max-width: 860px) {
   .app {
@@ -631,35 +502,12 @@ body.dark .icon-btn {
     padding-top: 22px;
   }
 
-  .hero {
-    grid-template-columns: 1fr;
-    padding-right: 66px;
-  }
-
-  .status-pill {
-    width: fit-content;
-  }
-
-  .grid {
-    grid-template-columns: 1fr;
-  }
-
-  .form-row {
-    grid-template-columns: 1fr;
-  }
-
-  .task-top {
-    align-items: flex-start;
-  }
-
-  .toolbar {
-    align-items: stretch;
-  }
-
-  .toolbar select {
-    width: 100%;
-  }
-
+  .hero { padding-right: 66px; }
+  .grid { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  .task-top { align-items: flex-start; }
+  .toolbar { align-items: stretch; }
+  .toolbar select { width: 100%; }
   .task-count {
     width: 100%;
     margin-left: 0;
@@ -667,7 +515,6 @@ body.dark .icon-btn {
 }
 </style>
 </head>
-
 <body>
 <div class="app">
   <section id="loadingView" class="loading-screen">
@@ -680,18 +527,7 @@ body.dark .icon-btn {
 
   <main id="mainView" class="hide">
     <header class="hero">
-      <div>
-        <div class="kicker">Home • reminders • real life</div>
-        <h1>Honey<br>List</h1>
-        <p class="subtitle">
-          A simple shared place for the things that need doing, sorted by priority, due date, and when they were added.
-        </p>
-      </div>
-
-      <div class="status-pill">
-        <span class="status-dot"></span>
-        <span id="connectionText">Connected</span>
-      </div>
+      <h1>Honey<br>List</h1>
     </header>
 
     <section class="grid">
@@ -842,8 +678,6 @@ const tasksRef = collection(db, "honeyTasks");
 
 const loadingView = document.getElementById("loadingView");
 const mainView = document.getElementById("mainView");
-const connectionText = document.getElementById("connectionText");
-
 const taskForm = document.getElementById("taskForm");
 const editingId = document.getElementById("editingId");
 const title = document.getElementById("title");
@@ -853,13 +687,11 @@ const category = document.getElementById("category");
 const saveBtn = document.getElementById("saveBtn");
 const resetBtn = document.getElementById("resetBtn");
 const formError = document.getElementById("formError");
-
 const tasksEl = document.getElementById("tasks");
 const sortMode = document.getElementById("sortMode");
 const showOpenBtn = document.getElementById("showOpenBtn");
 const showAllBtn = document.getElementById("showAllBtn");
 const taskCount = document.getElementById("taskCount");
-
 const hamburger = document.getElementById("hamburger");
 const menu = document.getElementById("menu");
 const themeBtn = document.getElementById("themeBtn");
@@ -892,13 +724,11 @@ function initAuth() {
       currentUser = user;
       loadingView.classList.add("hide");
       mainView.classList.remove("hide");
-      connectionText.textContent = "Connected";
       startTaskListener();
       return;
     }
 
     try {
-      connectionText.textContent = "Connecting";
       await signInAnonymously(auth);
     } catch (error) {
       loadingView.classList.remove("hide");
@@ -917,17 +747,12 @@ function startTaskListener() {
   unsubscribeTasks = onSnapshot(
     tasksRef,
     (snapshot) => {
-      allTasks = snapshot.docs.map((item) => ({
-        id: item.id,
-        ...item.data()
-      }));
-
+      allTasks = snapshot.docs.map((item) => ({ id: item.id, ...item.data() }));
       renderTasks();
     },
     (error) => {
       console.error(error);
       tasksEl.innerHTML = `<div class="empty">Could not load the list. Check Firestore rules and Anonymous Auth.</div>`;
-      connectionText.textContent = "Needs setup";
     }
   );
 }
@@ -935,7 +760,6 @@ function startTaskListener() {
 function initEvents() {
   taskForm.addEventListener("submit", saveTask);
   resetBtn.addEventListener("click", resetForm);
-
   sortMode.addEventListener("change", renderTasks);
 
   showOpenBtn.addEventListener("click", () => {
@@ -953,10 +777,7 @@ function initEvents() {
   });
 
   document.addEventListener("click", (event) => {
-    const clickedMenu = menu.contains(event.target);
-    const clickedButton = hamburger.contains(event.target);
-
-    if (!clickedMenu && !clickedButton) {
+    if (!menu.contains(event.target) && !hamburger.contains(event.target)) {
       menu.classList.remove("open");
     }
   });
@@ -965,7 +786,6 @@ function initEvents() {
     button.addEventListener("click", () => {
       document.querySelectorAll("[data-jump]").forEach((btn) => btn.classList.remove("active"));
       button.classList.add("active");
-
       document.getElementById(button.dataset.jump).scrollIntoView({ behavior: "smooth" });
       menu.classList.remove("open");
     });
@@ -973,7 +793,6 @@ function initEvents() {
 
   themeBtn.addEventListener("click", () => {
     document.body.classList.toggle("dark");
-
     const isDark = document.body.classList.contains("dark");
     localStorage.setItem("honeyTheme", isDark ? "dark" : "light");
     themeIcon.textContent = isDark ? "🌙" : "☀️";
@@ -1048,7 +867,6 @@ function renderTasks() {
   }
 
   tasks.sort(getSorter(sortMode.value));
-
   taskCount.textContent = `${tasks.length} ${tasks.length === 1 ? "item" : "items"}`;
 
   if (!tasks.length) {
@@ -1069,7 +887,6 @@ function renderTasks() {
           status: task.status === "done" ? "open" : "done",
           updatedAt: serverTimestamp()
         });
-
         showToast(task.status === "done" ? "Moved back to open" : "Marked done");
       } catch (error) {
         console.error(error);
@@ -1089,8 +906,7 @@ function renderTasks() {
       dueDate.value = task.dueDate || "";
       category.value = task.category || "Home";
 
-      const priorityValue = String(task.priority || 2);
-      const priorityInput = document.querySelector(`input[name="priority"][value="${priorityValue}"]`);
+      const priorityInput = document.querySelector(`input[name="priority"][value="${String(task.priority || 2)}"]`);
       if (priorityInput) priorityInput.checked = true;
 
       saveBtn.textContent = "Save Changes";
@@ -1123,7 +939,6 @@ function taskTemplate(task) {
   const created = task.createdAt?.seconds
     ? new Date(task.createdAt.seconds * 1000).toLocaleDateString()
     : "New";
-
   const details = task.description
     ? `<p>${escapeHtml(task.description)}</p>`
     : `<p>No extra details.</p>`;
@@ -1135,14 +950,12 @@ function taskTemplate(task) {
           <h3>${escapeHtml(task.title || "")}</h3>
           ${details}
         </div>
-
         <div class="actions">
           <button class="icon-btn" title="Done" data-done="${task.id}">${isDone ? "↩" : "✓"}</button>
           <button class="icon-btn" title="Edit" data-edit="${task.id}">✎</button>
           <button class="icon-btn" title="Delete" data-delete="${task.id}">×</button>
         </div>
       </div>
-
       <div class="meta">
         <span class="pill">${escapeHtml(task.category || "Other")}</span>
         <span class="pill ${priorityLabel.className}">${priorityLabel.text}</span>
@@ -1159,28 +972,14 @@ function getSorter(mode) {
     const statusB = b.status === "done" ? 1 : 0;
 
     if (statusA !== statusB) return statusA - statusB;
+    if (mode === "priority") return Number(b.priority || 0) - Number(a.priority || 0);
+    if (mode === "newest") return getCreated(b) - getCreated(a);
+    if (mode === "oldest") return getCreated(a) - getCreated(b);
+    if (mode === "due") return getDue(a) - getDue(b);
 
-    if (mode === "priority") {
-      return Number(b.priority || 0) - Number(a.priority || 0);
-    }
-
-    if (mode === "newest") {
-      return getCreated(b) - getCreated(a);
-    }
-
-    if (mode === "oldest") {
-      return getCreated(a) - getCreated(b);
-    }
-
-    if (mode === "due") {
-      return getDue(a) - getDue(b);
-    }
-
-    return (
-      getDue(a) - getDue(b) ||
+    return getDue(a) - getDue(b) ||
       Number(b.priority || 0) - Number(a.priority || 0) ||
-      getCreated(b) - getCreated(a)
-    );
+      getCreated(b) - getCreated(a);
   };
 }
 
@@ -1199,34 +998,22 @@ function getPriorityLabel(value) {
 }
 
 function getDueInfo(value) {
-  if (!value) {
-    return { text: "No due date", className: "" };
-  }
+  if (!value) return { text: "No due date", className: "" };
 
   const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  today.setHours(0,0,0,0);
 
   const due = new Date(value + "T00:00:00");
   const diffDays = Math.round((due - today) / 86400000);
-
   const pretty = due.toLocaleDateString(undefined, {
     month: "short",
     day: "numeric",
     year: "numeric"
   });
 
-  if (diffDays < 0) {
-    return { text: `Overdue: ${pretty}`, className: "overdue" };
-  }
-
-  if (diffDays === 0) {
-    return { text: `Due today`, className: "today" };
-  }
-
-  if (diffDays === 1) {
-    return { text: `Due tomorrow`, className: "today" };
-  }
-
+  if (diffDays < 0) return { text: `Overdue: ${pretty}`, className: "overdue" };
+  if (diffDays === 0) return { text: "Due today", className: "today" };
+  if (diffDays === 1) return { text: "Due tomorrow", className: "today" };
   return { text: `Due: ${pretty}`, className: "" };
 }
 
@@ -1242,7 +1029,6 @@ function escapeHtml(value) {
 function showToast(message) {
   toast.textContent = message;
   toast.classList.add("show");
-
   window.clearTimeout(showToast.timer);
   showToast.timer = window.setTimeout(() => {
     toast.classList.remove("show");
