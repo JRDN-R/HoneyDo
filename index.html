@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Honey Do List</title>
+
+<style>
+:root {
+  --bg: #faf6f1;
+  --bg-soft: #fffaf5;
+  --card: rgba(255, 255, 255, 0.72);
+  --card-solid: #ffffff;
+  --text: #29211d;
+  --muted: #84756d;
+  --line: rgba(64, 42, 31, 0.12);
+  --accent: #d98f7b;
+  --accent-2: #e9b59d;
+  --accent-dark: #a95f50;
+  --danger: #a74736;
+  --success: #4f7b58;
+  --shadow: 0 24px 70px rgba(98, 57, 34, 0.14);
+  --radius-xl: 28px;
+  --radius-lg: 22px;
+  --radius-md: 16px;
+}
+
+body.dark {
+  --bg: #151211;
+  --bg-soft: #1d1917;
+  --card: rgba(35, 30, 27, 0.76);
+  --card-solid: #231e1b;
+  --text: #f8eee6;
+  --muted: #b8aaa1;
+  --line: rgba(255, 241, 228, 0.12);
+  --accent: #f0a58f;
+  --accent-2: #c98272;
+  --accent-dark: #ffc0ad;
+  --danger: #ff9b8b;
+  --success: #9ed4a6;
+  --shadow: 0 24px 70px rgba(0, 0, 0, 0.36);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--text);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background:
+    radial-gradient(circle at 8% 0%, rgba(217, 143, 123, 0.26), transparent 30rem),
+    radial-gradient(circle at 92% 18%, rgba(233, 181, 157, 0.22), transparent 32rem),
+    radial-gradient(circle at 50% 100%, rgba(217, 143, 123, 0.12), transparent 34rem),
+    var(--bg);
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.app {
+  width: min(1160px, calc(100% - 28px));
+  margin: 0 auto;
+  padding: 28px 0 86px;
+}
+
+.loading-screen {
+  min-height: 78vh;
+  display: grid;
+  place-items: center;
+}
+
+.loading-card {
+  width: min(390px, 100%);
+  padding: 26px;
+  border-radius: var(--radius-xl);
+  background: var(--card);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.loading-title {
+  font-size: 1.35rem;
+  font-weight: 850;
+  letter-spacing: -0.04em;
+  margin-bottom: 10px;
+}
+
+.loading-text {
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.skeleton {
+  height: 12px;
+  border-radius: 999px;
+  margin-top: 18px;
+  overflow: hidden;
+  background: rgba(128, 100, 84, 0.14);
+}
+
+.skeleton::after {
+  content: "";
+  display: block;
+  width: 42%;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.62), transparent);
+  animation: shimmer 1.4s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(260%);
+  }
+}
+
+.hide {
+  display: none !important;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 20px;
+  align-items: start;
+  margin-bottom: 22px;
+  padding-right: 64px;
+}
+
+.kicker {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  gap: 8px;
+  color: var(--accent-dark);
+  font-size: 0.78rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.kicker::before {
+  content: "";
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(2.8rem, 8vw, 5.8rem);
+  line-height: 0.87;
+  letter-spacing: -0.085em;
+}
+
+.subtitle {
+  margin: 14px 0 0;
+  color: var(--muted);
+  max-width: 650px;
+  font-size: 1.02rem;
+  line-height: 1.5;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 13px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--muted);
+  font-size: 0.85rem;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--success);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 0.92fr 1.42fr;
+  gap: 18px;
+  align-items: start;
+}
+
+.panel {
+  background: var(--card);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  border-radius: var(--radius-xl);
+  padding: 20px;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.panel-title {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.panel-title h2 {
+  margin: 0;
+  font-size: 1.35rem;
+  letter-spacing: -0.045em;
+}
+
+.panel-title p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.field {
+  display: grid;
+  gap: 7px;
+  margin-bottom: 14px;
+}
+
+label {
+  color: var(--muted);
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.56);
+  color: var(--text);
+  border-radius: var(--radius-md);
+  padding: 13px 14px;
+  outline: none;
+  transition: border 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+body.dark input,
+body.dark textarea,
+body.dark select {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: rgba(217, 143, 123, 0.62);
+  box-shadow: 0 0 0 4px rgba(217, 143, 123, 0.13);
+}
+
+textarea {
+  min-height: 116px;
+  resize: vertical;
+  line-height: 1.45;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.priority-picker {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.priority-picker input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.priority-choice {
+  text-align: center;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 11px 10px;
+  color: var(--muted);
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.38);
+  font-weight: 800;
+  font-size: 0.88rem;
+  transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+
+body.dark .priority-choice {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.priority-picker input:checked + .priority-choice {
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+  border-color: transparent;
+  box-shadow: 0 12px 26px rgba(217, 143, 123, 0.25);
+}
+
+.priority-choice:active {
+  transform: scale(0.98);
+}
+
+.primary-btn,
+.ghost-btn,
+.icon-btn,
+.tab-btn {
+  border: 0;
+  cursor: pointer;
+}
+
+.primary-btn {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+  color: #fff;
+  font-weight: 900;
+  box-shadow: 0 15px 32px rgba(184, 111, 91, 0.26);
+}
+
+.secondary-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.ghost-btn {
+  padding: 10px 13px;
+  border-radius: 999px;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.44);
+  border: 1px solid var(--line);
+}
+
+body.dark .ghost-btn {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.toolbar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.toolbar select {
+  width: auto;
+  min-width: 170px;
+  border-radius: 999px;
+  padding: 10px 12px;
+}
+
+.task-count {
+  color: var(--muted);
+  margin-left: auto;
+  font-size: 0.88rem;
+  font-weight: 750;
+}
+
+.tasks {
+  display: grid;
+  gap: 12px;
+}
+
+.task-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.42);
+  transition: opacity 0.16s ease, transform 0.16s ease, background 0.16s ease;
+}
+
+body.dark .task-card {
+  background: rgba(255, 255, 255, 0.055);
+}
+
+.task-card:hover {
+  transform: translateY(-1px);
+}
+
+.task-card.done {
+  opacity: 0.58;
+}
+
+.task-card.done h3 {
+  text-decoration: line-through;
+}
+
+.task-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.task-card h3 {
+  margin: 0 0 7px;
+  font-size: 1.06rem;
+  letter-spacing: -0.025em;
+}
+
+.task-card p {
+  color: var(--muted);
+  margin: 0 0 13px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pill {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px 9px;
+  font-size: 0.78rem;
+  font-weight: 750;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.36);
+}
+
+body.dark .pill {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.priority-high {
+  color: var(--danger);
+}
+
+.priority-normal {
+  color: var(--accent-dark);
+}
+
+.priority-low {
+  color: var(--muted);
+}
+
+.overdue {
+  color: var(--danger);
+}
+
+.today {
+  color: var(--accent-dark);
+}
+
+.actions {
+  display: flex;
+  gap: 7px;
+  flex-shrink: 0;
+}
+
+.icon-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.46);
+  color: var(--text);
+  border: 1px solid var(--line);
+  display: grid;
+  place-items: center;
+}
+
+body.dark .icon-btn {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.empty {
+  color: var(--muted);
+  padding: 34px 22px;
+  text-align: center;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius-lg);
+  line-height: 1.5;
+}
+
+.error {
+  color: var(--danger);
+  margin-top: 12px;
+  min-height: 20px;
+  font-size: 0.9rem;
+}
+
+.floating-nav {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 30;
+}
+
+.hamburger {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--card);
+  box-shadow: var(--shadow);
+  color: var(--text);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.hamburger span,
+.hamburger span::before,
+.hamburger span::after {
+  display: block;
+  width: 23px;
+  height: 2px;
+  background: currentColor;
+  border-radius: 999px;
+  content: "";
+  transition: transform 0.18s ease;
+}
+
+.hamburger span::before {
+  transform: translateY(-7px);
+}
+
+.hamburger span::after {
+  transform: translateY(5px);
+}
+
+.menu {
+  position: absolute;
+  right: 0;
+  bottom: 72px;
+  width: 246px;
+  border-radius: 26px;
+  padding: 12px;
+  display: none;
+  background: var(--card);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.menu.open {
+  display: grid;
+  gap: 8px;
+}
+
+.tab-btn {
+  width: 100%;
+  text-align: left;
+  padding: 13px 14px;
+  border-radius: 17px;
+  background: transparent;
+  color: var(--text);
+}
+
+.tab-btn.active {
+  background: rgba(217, 143, 123, 0.18);
+  color: var(--accent-dark);
+  font-weight: 900;
+}
+
+.menu-divider {
+  height: 1px;
+  background: var(--line);
+  margin: 8px 0;
+}
+
+.theme-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%) translateY(120px);
+  background: var(--card-solid);
+  color: var(--text);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  border-radius: 999px;
+  padding: 12px 16px;
+  z-index: 40;
+  transition: transform 0.22s ease;
+}
+
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+}
+
+@media (max-width: 860px) {
+  .app {
+    width: min(100% - 24px, 1160px);
+    padding-top: 22px;
+  }
+
+  .hero {
+    grid-template-columns: 1fr;
+    padding-right: 66px;
+  }
+
+  .status-pill {
+    width: fit-content;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .task-top {
+    align-items: flex-start;
+  }
+
+  .toolbar {
+    align-items: stretch;
+  }
+
+  .toolbar select {
+    width: 100%;
+  }
+
+  .task-count {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+  <section id="loadingView" class="loading-screen">
+    <div class="loading-card">
+      <div class="loading-title">Opening Honey List</div>
+      <div class="loading-text">Getting the shared list ready.</div>
+      <div class="skeleton"></div>
+    </div>
+  </section>
+
+  <main id="mainView" class="hide">
+    <header class="hero">
+      <div>
+        <div class="kicker">Home • reminders • real life</div>
+        <h1>Honey<br>List</h1>
+        <p class="subtitle">
+          A simple shared place for the things that need doing, sorted by priority, due date, and when they were added.
+        </p>
+      </div>
+
+      <div class="status-pill">
+        <span class="status-dot"></span>
+        <span id="connectionText">Connected</span>
+      </div>
+    </header>
+
+    <section class="grid">
+      <section id="honeyDoPage" class="panel">
+        <div class="panel-title">
+          <div>
+            <h2>Honey Do</h2>
+            <p>Add something to the list.</p>
+          </div>
+        </div>
+
+        <form id="taskForm">
+          <input type="hidden" id="editingId" />
+
+          <div class="field">
+            <label for="title">Title</label>
+            <input id="title" maxlength="80" placeholder="Example: Fix the playpen pipe" required />
+          </div>
+
+          <div class="field">
+            <label for="description">Details</label>
+            <textarea id="description" maxlength="1000" placeholder="Add anything helpful here."></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="field">
+              <label for="dueDate">Needs done by</label>
+              <input id="dueDate" type="date" />
+            </div>
+
+            <div class="field">
+              <label for="category">Category</label>
+              <select id="category">
+                <option>Home</option>
+                <option>Errand</option>
+                <option>Kids</option>
+                <option>Repair</option>
+                <option>Church</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+
+          <label>Priority</label>
+          <div class="priority-picker">
+            <input id="priorityLow" type="radio" name="priority" value="1" />
+            <label class="priority-choice" for="priorityLow">Low</label>
+
+            <input id="priorityNormal" type="radio" name="priority" value="2" checked />
+            <label class="priority-choice" for="priorityNormal">Normal</label>
+
+            <input id="priorityHigh" type="radio" name="priority" value="3" />
+            <label class="priority-choice" for="priorityHigh">High</label>
+          </div>
+
+          <button id="saveBtn" class="primary-btn" type="submit">Add to Honey List</button>
+
+          <div class="secondary-row">
+            <button id="resetBtn" class="ghost-btn" type="button">Clear</button>
+          </div>
+
+          <div id="formError" class="error"></div>
+        </form>
+      </section>
+
+      <section id="honeyListPage" class="panel">
+        <div class="panel-title">
+          <div>
+            <h2>Honey List</h2>
+            <p>Everything that has been added.</p>
+          </div>
+        </div>
+
+        <div class="toolbar">
+          <select id="sortMode">
+            <option value="smart">Smart sort</option>
+            <option value="due">Due date</option>
+            <option value="priority">Priority</option>
+            <option value="newest">Newest first</option>
+            <option value="oldest">Oldest first</option>
+          </select>
+
+          <button id="showOpenBtn" class="ghost-btn">Open only</button>
+          <button id="showAllBtn" class="ghost-btn">Show all</button>
+
+          <div id="taskCount" class="task-count">0 items</div>
+        </div>
+
+        <div id="tasks" class="tasks">
+          <div class="empty">Nothing on the list yet.</div>
+        </div>
+      </section>
+    </section>
+  </main>
+</div>
+
+<div class="floating-nav">
+  <div id="menu" class="menu">
+    <button class="tab-btn active" data-jump="honeyListPage">Honey List</button>
+    <button class="tab-btn" data-jump="honeyDoPage">Honey Do</button>
+
+    <div class="menu-divider"></div>
+
+    <button id="themeBtn" class="tab-btn theme-btn">
+      <span>Theme</span>
+      <span id="themeIcon">☀️</span>
+    </button>
+  </div>
+
+  <button id="hamburger" class="hamburger" aria-label="Open menu">
+    <span></span>
+  </button>
+</div>
+
+<div id="toast" class="toast">Saved</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import {
+  getAuth,
+  signInAnonymously,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  doc,
+  onSnapshot,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB9TYupEjbdpKC6TuaWiqCpN5WJC-pIyWU",
+  authDomain: "honeydodolist.firebaseapp.com",
+  projectId: "honeydodolist",
+  storageBucket: "honeydodolist.firebasestorage.app",
+  messagingSenderId: "892244474731",
+  appId: "1:892244474731:web:9f9bf66714306cde0e6a2e"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const tasksRef = collection(db, "honeyTasks");
+
+const loadingView = document.getElementById("loadingView");
+const mainView = document.getElementById("mainView");
+const connectionText = document.getElementById("connectionText");
+
+const taskForm = document.getElementById("taskForm");
+const editingId = document.getElementById("editingId");
+const title = document.getElementById("title");
+const description = document.getElementById("description");
+const dueDate = document.getElementById("dueDate");
+const category = document.getElementById("category");
+const saveBtn = document.getElementById("saveBtn");
+const resetBtn = document.getElementById("resetBtn");
+const formError = document.getElementById("formError");
+
+const tasksEl = document.getElementById("tasks");
+const sortMode = document.getElementById("sortMode");
+const showOpenBtn = document.getElementById("showOpenBtn");
+const showAllBtn = document.getElementById("showAllBtn");
+const taskCount = document.getElementById("taskCount");
+
+const hamburger = document.getElementById("hamburger");
+const menu = document.getElementById("menu");
+const themeBtn = document.getElementById("themeBtn");
+const themeIcon = document.getElementById("themeIcon");
+const toast = document.getElementById("toast");
+
+let currentUser = null;
+let allTasks = [];
+let showOpenOnly = true;
+let unsubscribeTasks = null;
+
+initTheme();
+initAuth();
+initEvents();
+
+function initTheme() {
+  const savedTheme = localStorage.getItem("honeyTheme");
+
+  if (savedTheme === "dark") {
+    document.body.classList.add("dark");
+    themeIcon.textContent = "🌙";
+  } else {
+    themeIcon.textContent = "☀️";
+  }
+}
+
+function initAuth() {
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      currentUser = user;
+      loadingView.classList.add("hide");
+      mainView.classList.remove("hide");
+      connectionText.textContent = "Connected";
+      startTaskListener();
+      return;
+    }
+
+    try {
+      connectionText.textContent = "Connecting";
+      await signInAnonymously(auth);
+    } catch (error) {
+      loadingView.classList.remove("hide");
+      mainView.classList.add("hide");
+      document.querySelector(".loading-title").textContent = "Could not connect";
+      document.querySelector(".loading-text").textContent =
+        "Make sure Anonymous sign-in is enabled in Firebase Authentication.";
+      console.error(error);
+    }
+  });
+}
+
+function startTaskListener() {
+  if (unsubscribeTasks) unsubscribeTasks();
+
+  unsubscribeTasks = onSnapshot(
+    tasksRef,
+    (snapshot) => {
+      allTasks = snapshot.docs.map((item) => ({
+        id: item.id,
+        ...item.data()
+      }));
+
+      renderTasks();
+    },
+    (error) => {
+      console.error(error);
+      tasksEl.innerHTML = `<div class="empty">Could not load the list. Check Firestore rules and Anonymous Auth.</div>`;
+      connectionText.textContent = "Needs setup";
+    }
+  );
+}
+
+function initEvents() {
+  taskForm.addEventListener("submit", saveTask);
+  resetBtn.addEventListener("click", resetForm);
+
+  sortMode.addEventListener("change", renderTasks);
+
+  showOpenBtn.addEventListener("click", () => {
+    showOpenOnly = true;
+    renderTasks();
+  });
+
+  showAllBtn.addEventListener("click", () => {
+    showOpenOnly = false;
+    renderTasks();
+  });
+
+  hamburger.addEventListener("click", () => {
+    menu.classList.toggle("open");
+  });
+
+  document.addEventListener("click", (event) => {
+    const clickedMenu = menu.contains(event.target);
+    const clickedButton = hamburger.contains(event.target);
+
+    if (!clickedMenu && !clickedButton) {
+      menu.classList.remove("open");
+    }
+  });
+
+  document.querySelectorAll("[data-jump]").forEach((button) => {
+    button.addEventListener("click", () => {
+      document.querySelectorAll("[data-jump]").forEach((btn) => btn.classList.remove("active"));
+      button.classList.add("active");
+
+      document.getElementById(button.dataset.jump).scrollIntoView({ behavior: "smooth" });
+      menu.classList.remove("open");
+    });
+  });
+
+  themeBtn.addEventListener("click", () => {
+    document.body.classList.toggle("dark");
+
+    const isDark = document.body.classList.contains("dark");
+    localStorage.setItem("honeyTheme", isDark ? "dark" : "light");
+    themeIcon.textContent = isDark ? "🌙" : "☀️";
+  });
+}
+
+async function saveTask(event) {
+  event.preventDefault();
+  formError.textContent = "";
+
+  const cleanTitle = title.value.trim();
+  const cleanDescription = description.value.trim();
+  const selectedPriority = Number(document.querySelector("input[name='priority']:checked").value);
+
+  if (!cleanTitle) {
+    formError.textContent = "Add a title first.";
+    title.focus();
+    return;
+  }
+
+  saveBtn.disabled = true;
+  saveBtn.textContent = editingId.value ? "Saving..." : "Adding...";
+
+  const data = {
+    title: cleanTitle,
+    description: cleanDescription,
+    dueDate: dueDate.value || "",
+    priority: selectedPriority,
+    category: category.value || "Home",
+    status: "open",
+    updatedAt: serverTimestamp()
+  };
+
+  try {
+    if (editingId.value) {
+      await updateDoc(doc(db, "honeyTasks", editingId.value), data);
+      showToast("Updated");
+    } else {
+      await addDoc(tasksRef, {
+        ...data,
+        createdBy: currentUser?.uid || "anonymous",
+        createdAt: serverTimestamp()
+      });
+      showToast("Added");
+    }
+
+    resetForm();
+    document.getElementById("honeyListPage").scrollIntoView({ behavior: "smooth" });
+  } catch (error) {
+    console.error(error);
+    formError.textContent = "Could not save this item.";
+  } finally {
+    saveBtn.disabled = false;
+    saveBtn.textContent = editingId.value ? "Save Changes" : "Add to Honey List";
+  }
+}
+
+function resetForm() {
+  editingId.value = "";
+  taskForm.reset();
+  document.getElementById("priorityNormal").checked = true;
+  category.value = "Home";
+  saveBtn.textContent = "Add to Honey List";
+  formError.textContent = "";
+}
+
+function renderTasks() {
+  let tasks = [...allTasks];
+
+  if (showOpenOnly) {
+    tasks = tasks.filter((task) => task.status !== "done");
+  }
+
+  tasks.sort(getSorter(sortMode.value));
+
+  taskCount.textContent = `${tasks.length} ${tasks.length === 1 ? "item" : "items"}`;
+
+  if (!tasks.length) {
+    tasksEl.innerHTML = `<div class="empty">Nothing on the list yet.</div>`;
+    return;
+  }
+
+  tasksEl.innerHTML = tasks.map(taskTemplate).join("");
+
+  document.querySelectorAll("[data-done]").forEach((button) => {
+    button.addEventListener("click", async () => {
+      const id = button.dataset.done;
+      const task = allTasks.find((item) => item.id === id);
+      if (!task) return;
+
+      try {
+        await updateDoc(doc(db, "honeyTasks", id), {
+          status: task.status === "done" ? "open" : "done",
+          updatedAt: serverTimestamp()
+        });
+
+        showToast(task.status === "done" ? "Moved back to open" : "Marked done");
+      } catch (error) {
+        console.error(error);
+        showToast("Could not update");
+      }
+    });
+  });
+
+  document.querySelectorAll("[data-edit]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const task = allTasks.find((item) => item.id === button.dataset.edit);
+      if (!task) return;
+
+      editingId.value = task.id;
+      title.value = task.title || "";
+      description.value = task.description || "";
+      dueDate.value = task.dueDate || "";
+      category.value = task.category || "Home";
+
+      const priorityValue = String(task.priority || 2);
+      const priorityInput = document.querySelector(`input[name="priority"][value="${priorityValue}"]`);
+      if (priorityInput) priorityInput.checked = true;
+
+      saveBtn.textContent = "Save Changes";
+      document.getElementById("honeyDoPage").scrollIntoView({ behavior: "smooth" });
+      title.focus();
+    });
+  });
+
+  document.querySelectorAll("[data-delete]").forEach((button) => {
+    button.addEventListener("click", async () => {
+      const id = button.dataset.delete;
+      const ok = confirm("Delete this item?");
+      if (!ok) return;
+
+      try {
+        await deleteDoc(doc(db, "honeyTasks", id));
+        showToast("Deleted");
+      } catch (error) {
+        console.error(error);
+        showToast("Could not delete");
+      }
+    });
+  });
+}
+
+function taskTemplate(task) {
+  const isDone = task.status === "done";
+  const priorityLabel = getPriorityLabel(task.priority);
+  const dueInfo = getDueInfo(task.dueDate);
+  const created = task.createdAt?.seconds
+    ? new Date(task.createdAt.seconds * 1000).toLocaleDateString()
+    : "New";
+
+  const details = task.description
+    ? `<p>${escapeHtml(task.description)}</p>`
+    : `<p>No extra details.</p>`;
+
+  return `
+    <article class="task-card ${isDone ? "done" : ""}">
+      <div class="task-top">
+        <div>
+          <h3>${escapeHtml(task.title || "")}</h3>
+          ${details}
+        </div>
+
+        <div class="actions">
+          <button class="icon-btn" title="Done" data-done="${task.id}">${isDone ? "↩" : "✓"}</button>
+          <button class="icon-btn" title="Edit" data-edit="${task.id}">✎</button>
+          <button class="icon-btn" title="Delete" data-delete="${task.id}">×</button>
+        </div>
+      </div>
+
+      <div class="meta">
+        <span class="pill">${escapeHtml(task.category || "Other")}</span>
+        <span class="pill ${priorityLabel.className}">${priorityLabel.text}</span>
+        <span class="pill ${dueInfo.className}">${dueInfo.text}</span>
+        <span class="pill">Added: ${created}</span>
+      </div>
+    </article>
+  `;
+}
+
+function getSorter(mode) {
+  return (a, b) => {
+    const statusA = a.status === "done" ? 1 : 0;
+    const statusB = b.status === "done" ? 1 : 0;
+
+    if (statusA !== statusB) return statusA - statusB;
+
+    if (mode === "priority") {
+      return Number(b.priority || 0) - Number(a.priority || 0);
+    }
+
+    if (mode === "newest") {
+      return getCreated(b) - getCreated(a);
+    }
+
+    if (mode === "oldest") {
+      return getCreated(a) - getCreated(b);
+    }
+
+    if (mode === "due") {
+      return getDue(a) - getDue(b);
+    }
+
+    return (
+      getDue(a) - getDue(b) ||
+      Number(b.priority || 0) - Number(a.priority || 0) ||
+      getCreated(b) - getCreated(a)
+    );
+  };
+}
+
+function getDue(task) {
+  return task.dueDate ? new Date(task.dueDate + "T00:00:00").getTime() : Infinity;
+}
+
+function getCreated(task) {
+  return task.createdAt?.seconds ? task.createdAt.seconds * 1000 : 0;
+}
+
+function getPriorityLabel(value) {
+  if (Number(value) === 3) return { text: "High priority", className: "priority-high" };
+  if (Number(value) === 1) return { text: "Low priority", className: "priority-low" };
+  return { text: "Normal priority", className: "priority-normal" };
+}
+
+function getDueInfo(value) {
+  if (!value) {
+    return { text: "No due date", className: "" };
+  }
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const due = new Date(value + "T00:00:00");
+  const diffDays = Math.round((due - today) / 86400000);
+
+  const pretty = due.toLocaleDateString(undefined, {
+    month: "short",
+    day: "numeric",
+    year: "numeric"
+  });
+
+  if (diffDays < 0) {
+    return { text: `Overdue: ${pretty}`, className: "overdue" };
+  }
+
+  if (diffDays === 0) {
+    return { text: `Due today`, className: "today" };
+  }
+
+  if (diffDays === 1) {
+    return { text: `Due tomorrow`, className: "today" };
+  }
+
+  return { text: `Due: ${pretty}`, className: "" };
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function showToast(message) {
+  toast.textContent = message;
+  toast.classList.add("show");
+
+  window.clearTimeout(showToast.timer);
+  showToast.timer = window.setTimeout(() => {
+    toast.classList.remove("show");
+  }, 1800);
+}
+</script>
+</body>
+</html>
