@@ -137,6 +137,15 @@
 </div>
 
 <div id="toast" class="toast">Saved</div>
+<script>
+  const safeDateInput = document.getElementById("dueDate");
+  safeDateInput.addEventListener("focus", () => {
+    safeDateInput.type = "date";
+  });
+  safeDateInput.addEventListener("blur", () => {
+    safeDateInput.type = "text";
+  });
+</script>
 <script type="module" src="app.js"></script>
 </body>
 </html>
