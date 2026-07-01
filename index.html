@@ -258,10 +258,13 @@
     const observer = new MutationObserver(() => requestAnimationFrame(organizeCompletedTasks));
     if (tasksEl) observer.observe(tasksEl, { childList: true });
 
-    setTimeout(() => {
+    let attempts = 0;
+    const showAllTimer = setInterval(() => {
       showAllBtn?.click();
       organizeCompletedTasks();
-    }, 150);
+      attempts += 1;
+      if (attempts >= 12) clearInterval(showAllTimer);
+    }, 250);
   });
 </script>
 </body>
