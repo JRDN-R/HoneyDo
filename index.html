@@ -24,6 +24,49 @@
 <link rel="icon" type="image/png" sizes="180x180" href="apple-touch-icon.png" />
 <link rel="shortcut icon" type="image/png" href="apple-touch-icon.png" />
 <link rel="stylesheet" href="styles.css" />
+<style>
+  .completed-section {
+    display: grid;
+    gap: 12px;
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(45,151,85,.26);
+  }
+  .completed-heading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #2d9755;
+    font-weight: 900;
+    letter-spacing: -.02em;
+  }
+  .completed-check {
+    width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    background: rgba(45,151,85,.16);
+    border: 1px solid rgba(45,151,85,.28);
+  }
+  .completed-count {
+    color: var(--muted);
+    font-weight: 800;
+  }
+  .task-card.done {
+    opacity: 1;
+    border-color: rgba(45,151,85,.34);
+    background: rgba(45,151,85,.10);
+  }
+  .task-card.done h3 {
+    text-decoration: none;
+  }
+  .completed-badge {
+    color: #2d9755;
+    border-color: rgba(45,151,85,.28);
+    background: rgba(45,151,85,.12);
+  }
+</style>
 </head>
 <body>
 <div class="app">
@@ -179,5 +222,47 @@
   });
 </script>
 <script type="module" src="app.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const tasksEl = document.getElementById("tasks");
+    const showAllBtn = document.getElementById("showAllBtn");
+    let groupingCompleted = false;
+
+    function organizeCompletedTasks() {
+      if (groupingCompleted || !tasksEl) return;
+
+      const completedCards = Array.from(tasksEl.children).filter((item) => item.classList?.contains("done"));
+      if (!completedCards.length) return;
+
+      groupingCompleted = true;
+
+      const existingSection = tasksEl.querySelector(".completed-section");
+      if (existingSection) existingSection.remove();
+
+      const section = document.createElement("section");
+      section.className = "completed-section";
+      section.innerHTML = `<div class="completed-heading"><span class="completed-check">✓</span><span>Completed</span><span class="completed-count">${completedCards.length}</span></div>`;
+
+      completedCards.forEach((card) => {
+        if (!card.querySelector(".completed-badge")) {
+          const meta = card.querySelector(".meta");
+          if (meta) meta.insertAdjacentHTML("afterbegin", `<span class="pill completed-badge">✓ Completed</span>`);
+        }
+        section.appendChild(card);
+      });
+
+      tasksEl.appendChild(section);
+      groupingCompleted = false;
+    }
+
+    const observer = new MutationObserver(() => requestAnimationFrame(organizeCompletedTasks));
+    if (tasksEl) observer.observe(tasksEl, { childList: true });
+
+    setTimeout(() => {
+      showAllBtn?.click();
+      organizeCompletedTasks();
+    }, 150);
+  });
+</script>
 </body>
 </html>
